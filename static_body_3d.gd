@@ -71,9 +71,10 @@ func _ready():
 	
 	# Cielo
 	var sky_material = ProceduralSkyMaterial.new()
-	sky_material.sky_top_color = Color(0.05, 0.05, 0.2)
-	sky_material.sky_horizon_color = Color(0.3, 0.4, 0.6)
-	sky_material.ground_horizon_color = Color(0.3, 0.4, 0.6)
+	sky_material.sky_top_color = Color(0.02, 0.02, 0.08)
+	sky_material.sky_horizon_color = Color(0.1, 0.15, 0.3)
+	sky_material.ground_horizon_color = Color(0.1, 0.15, 0.3)
+
 	
 	var sky = Sky.new()
 	sky.sky_material = sky_material
@@ -84,3 +85,40 @@ func _ready():
 	
 	var world_env = get_parent().get_node("WorldEnvironment")
 	world_env.environment = env
+	
+	# Niebla
+	env.fog_enabled = true
+	env.fog_light_color = Color(0.1, 0.15, 0.3)
+	env.fog_density = 0.02
+	
+	# Estrellas
+	var stars = GPUParticles3D.new()
+	stars.amount = 500
+	stars.lifetime = 999.0
+	stars.explosiveness = 1.0
+	stars.local_coords = false
+	
+	var star_mesh = SphereMesh.new()
+	star_mesh.radius = 0.05
+	star_mesh.height = 0.1
+	
+	var star_mat = StandardMaterial3D.new()
+	star_mat.albedo_color = Color(1, 1, 1)
+	star_mat.emission_enabled = true
+	star_mat.emission = Color(1, 1, 1)
+	star_mat.emission_energy_multiplier = 2.0
+	star_mesh.material = star_mat
+	
+	var process_mat = ParticleProcessMaterial.new()
+	process_mat.emission_shape = ParticleProcessMaterial.EMISSION_SHAPE_SPHERE
+	process_mat.emission_sphere_radius = 200.0
+	process_mat.gravity = Vector3.ZERO
+	process_mat.initial_velocity_min = 0.0
+	process_mat.initial_velocity_max = 0.0
+	
+	stars.process_material = process_mat
+	stars.draw_pass_1 = star_mesh
+	stars.position = Vector3(0, 0, 0)
+	
+	get_parent().add_child(stars)
+	stars.restart()
