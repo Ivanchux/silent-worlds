@@ -21,6 +21,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, 0)
 script = ExtResource("1_ig7tw")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D" unique_id=1710775153]
+visible = false
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D" unique_id=457925534]
 shape = SubResource("CapsuleShape3D_0xm2m")
@@ -40,3 +41,25 @@ transform = Transform3D(0.70710677, 0.49999997, -0.49999997, 0, 0.70710677, 0.70
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1583902742]
 environment = SubResource("Environment_h2yge")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1342264932]
+
+[node name="Control" type="Control" parent="CanvasLayer" unique_id=1920987925]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer/Control" unique_id=485868364]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 24.0
+offset_bottom = 47.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="CanvasLayer/Control" unique_id=1067317883]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Jetpack"
