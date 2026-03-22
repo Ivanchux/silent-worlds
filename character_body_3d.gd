@@ -9,6 +9,8 @@ const MOUSE_SENSITIVITY = 0.003
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 var jetpack_fuel = JETPACK_MAX
 var using_jetpack = false
+var is_crouching = false
+var is_prone = false
 
 @onready var camera = $Camera3D
 @onready var jetpack_bar = $"../CanvasLayer/Control/ProgressBar"
@@ -16,7 +18,6 @@ var using_jetpack = false
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	
-	# Estilo HUD CRT
 	var bar = $"../CanvasLayer/Control/ProgressBar"
 	var label = $"../CanvasLayer/Control/Label"
 	
@@ -30,7 +31,6 @@ func _ready():
 	
 	bar.add_theme_stylebox_override("background", style_bg)
 	bar.add_theme_stylebox_override("fill", style_fill)
-	
 	label.add_theme_color_override("font_color", Color(0, 1, 0.5))
 
 func _input(event):
@@ -40,6 +40,23 @@ func _input(event):
 		camera.rotation.x = clamp(camera.rotation.x, -PI/2, PI/2)
 	if event.is_action_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+	if event is InputEventKey and event.pressed and not event.echo:
+		if event.keycode == KEY_C:
+			if is_crouching:
+				is_crouching = false
+				camera.position.y = 1.0
+			else:
+				is_crouching = true
+				is_prone = false
+				camera.position.y = 0.5
+		if event.keycode == KEY_Z:
+			if is_prone:
+				is_prone = false
+				camera.position.y = 1.0
+			else:
+				is_prone = true
+				is_crouching = false
+				camera.position.y = 0.1
 
 func _physics_process(delta):
 	if is_on_floor():
@@ -53,6 +70,14 @@ func _physics_process(delta):
 			jetpack_fuel -= delta
 			jetpack_fuel = max(jetpack_fuel, 0)
 
+	var current_speed = SPEED
+	if Input.is_key_pressed(KEY_SHIFT):
+		current_speed = SPEED * 2.2
+	elif is_prone:
+		current_speed = SPEED * 0.2
+	elif is_crouching:
+		current_speed = SPEED * 0.4
+
 	var input_dir = Vector2.ZERO
 	if Input.is_key_pressed(KEY_W):
 		input_dir.y -= 1
@@ -63,16 +88,15 @@ func _physics_process(delta):
 	if Input.is_key_pressed(KEY_D):
 		input_dir.x += 1
 	input_dir = input_dir.normalized()
-	
-	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
-	
-	if direction:
-		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED
-	else:
-		velocity.x = move_toward(velocity.x, 0, SPEED)
-		velocity.z = move_toward(velocity.z, 0, SPEED)
-		
-		jetpack_bar.value = jetpack_fuel
 
+	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
+
+	if direction:
+		velocity.x = direction.x * current_speed
+		velocity.z = direction.z * current_speed
+	else:
+		velocity.x = move_toward(velocity.x, 0, current_speed)
+		velocity.z = move_toward(velocity.z, 0, current_speed)
+
+	jetpack_bar.value = jetpack_fuel
 	move_and_slide()
