@@ -63,3 +63,25 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
 text = "Jetpack"
+
+[node name="Control2" type="Control" parent="CanvasLayer" unique_id=256828655]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control2" unique_id=329227939]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -500.0
+offset_top = -500.0
+offset_right = 1460.0
+offset_bottom = 1460.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/Control2" unique_id=60917853]

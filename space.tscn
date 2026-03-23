@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://batuw0fy7a25u"]
+
+[ext_resource type="Script" uid="uid://dcgy857428dln" path="res://rigid_body_3d.gd" id="1_l3rv8"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_noarx"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_a0tk4"]
+
+[sub_resource type="Environment" id="Environment_r3fl7"]
+background_mode = 1
+background_color = Color(0, 0, 0.03137255, 1)
+
+[node name="Node3D" type="Node3D" unique_id=743554865]
+
+[node name="RigidBody3D" type="RigidBody3D" parent="." unique_id=1193469464]
+script = ExtResource("1_l3rv8")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D" unique_id=783912241]
+mesh = SubResource("BoxMesh_noarx")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D" unique_id=100973196]
+shape = SubResource("BoxShape3D_a0tk4")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1433710630]
+environment = SubResource("Environment_r3fl7")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=968356881]
+transform = Transform3D(1, 0, 0, 0, 0.9659259, 0.25881907, 0, -0.25881907, 0.9659258, 0, 5, 10)

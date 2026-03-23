@@ -11,12 +11,17 @@ var jetpack_fuel = JETPACK_MAX
 var using_jetpack = false
 var is_crouching = false
 var is_prone = false
+var fading = false
+var fade_alpha = 0.0
+var fade_target_scene = ""
 
 @onready var camera = $Camera3D
 @onready var jetpack_bar = $"../CanvasLayer/Control/ProgressBar"
+@onready var fade_rect = $"../CanvasLayer/Control2/ColorRect"
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	fade_rect.modulate.a = 0.0
 	
 	var bar = $"../CanvasLayer/Control/ProgressBar"
 	var label = $"../CanvasLayer/Control/Label"
@@ -57,6 +62,19 @@ func _input(event):
 				is_prone = true
 				is_crouching = false
 				camera.position.y = 0.1
+		if event.keycode == KEY_T:
+			start_fade("res://space.tscn")
+
+func start_fade(scene_path):
+	fading = true
+	fade_target_scene = scene_path
+
+func _process(delta):
+	if fading:
+		fade_alpha += delta * 2.0
+		fade_rect.modulate.a = fade_alpha
+		if fade_alpha >= 1.0:
+			get_tree().change_scene_to_file(fade_target_scene)
 
 func _physics_process(delta):
 	if is_on_floor():

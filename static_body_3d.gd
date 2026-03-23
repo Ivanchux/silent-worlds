@@ -79,7 +79,7 @@ func _ready():
 	shader.code = "shader_type spatial;\nrender_mode unshaded, cull_front;\nvoid fragment() {\nvec2 uv = UV * 200.0;\nvec2 grid = fract(uv);\nvec2 id = floor(uv);\nfloat r = fract(sin(dot(id, vec2(127.1, 311.7))) * 43758.5);\nfloat star = step(0.97, r) * step(0.4, grid.x) * step(0.4, grid.y);\nALBEDO = vec3(star);\nEMISSION = vec3(star) * 2.0;\n}"
 	star_shader_mat.shader = shader
 	star_sphere.material_override = star_shader_mat
-	get_parent().add_child(star_sphere)
+	get_parent().add_child.call_deferred(star_sphere)
 	
 	# Cielo
 	var sky_material = ProceduralSkyMaterial.new()
